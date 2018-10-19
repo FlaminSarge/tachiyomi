@@ -88,6 +88,14 @@ class ReaderActivity : BaseRxActivity<ReaderActivityBinding, ReaderPresenter>() 
                 addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             }
         }
+
+        fun newCoverIntent(context: Context, manga: Manga): Intent {
+            return Intent(context, ReaderActivity::class.java).apply {
+                putExtra("manga", manga.id)
+                putExtra("cover", true)
+                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            }
+        }
     }
 
     private val preferences: PreferencesHelper by injectLazy()
@@ -145,7 +153,8 @@ class ReaderActivity : BaseRxActivity<ReaderActivityBinding, ReaderPresenter>() 
         if (presenter.needsInit()) {
             val manga = intent.extras!!.getLong("manga", -1)
             val chapter = intent.extras!!.getLong("chapter", -1)
-            if (manga == -1L || chapter == -1L) {
+            val cover = intent.extras!!.getBoolean("cover", false)
+            if (!cover && (manga == -1L || chapter == -1L)) {
                 finish()
                 return
             }

@@ -181,6 +181,12 @@ class MangaInfoHeaderAdapter(
                 }
                 .launchIn(controller.viewScope)
 
+            binding.mangaCover.clicks()
+                .onEach {
+                    controller.openCoverFullscreen(controller.presenter.manga)
+                }
+                .launchIn(controller.viewScope)
+
             binding.mangaCover.longClicks()
                 .onEach {
                     controller.activity?.copyToClipboard(

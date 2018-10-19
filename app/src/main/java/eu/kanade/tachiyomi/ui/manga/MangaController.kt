@@ -480,6 +480,12 @@ class MangaController :
         trackSheet?.show()
     }
 
+    fun openCoverFullscreen(manga: Manga) {
+        val activity = activity ?: return
+        val intent = ReaderActivity.newCoverIntent(activity, manga)
+        startActivity(intent)
+    }
+
     private fun addToLibrary(manga: Manga) {
         val categories = presenter.getCategories()
         val defaultCategoryId = preferences.defaultCategory()
