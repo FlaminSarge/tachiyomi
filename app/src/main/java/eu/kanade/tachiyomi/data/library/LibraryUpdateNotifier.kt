@@ -38,6 +38,13 @@ class LibraryUpdateNotifier(private val context: Context) {
     }
 
     /**
+     * Pending intent of action that pauses the library update
+     */
+    private val pauseIntent by lazy {
+        NotificationReceiver.pauseLibraryUpdatePendingBroadcast(this)
+    }
+
+    /**
      * Bitmap of the app for notifications.
      */
     private val notificationBitmap by lazy {
@@ -54,6 +61,7 @@ class LibraryUpdateNotifier(private val context: Context) {
             setLargeIcon(notificationBitmap)
             setOngoing(true)
             setOnlyAlertOnce(true)
+            addAction(R.drawable.ic_av_pause_grey_24dp_img, getString(R.string.action_pause), pauseIntent)
             addAction(R.drawable.ic_close_24dp, context.getString(android.R.string.cancel), cancelIntent)
         }
     }
