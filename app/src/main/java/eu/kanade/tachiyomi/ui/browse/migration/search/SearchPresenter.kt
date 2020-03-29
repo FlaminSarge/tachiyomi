@@ -78,6 +78,13 @@ class SearchPresenter(
         manga: Manga,
         replace: Boolean
     ) {
+        // migrating to the same manga means only title could have changed, update it and return
+        if (prevManga.id == manga.id) {
+            prevManga.title = manga.title
+            db.updateMangaTitle(prevManga).executeAsBlocking()
+            return
+        }
+
         val flags = preferences.migrateFlags().get()
         val migrateChapters =
             MigrationFlags.hasChapters(
@@ -161,7 +168,7 @@ class SearchPresenter(
                 manga.date_added = Date().time
             }
 
-            // SearchPresenter#networkToLocalManga may have updated the manga title, so ensure db gets updated title
+            // networkToLocalManga() may have updated the manga title, so ensure db gets updated title
             db.updateMangaTitle(manga).executeAsBlocking()
         }
     }

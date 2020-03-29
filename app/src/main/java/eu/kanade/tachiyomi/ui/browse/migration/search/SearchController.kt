@@ -58,8 +58,11 @@ class SearchController(
 
     override fun onMangaClick(manga: Manga) {
         newManga = manga
-        val dialog =
+        val dialog = if (newManga.id == this.manga!!.id)
+            RenameDialog(this.manga, newManga.title, this)
+        else
             MigrationDialog(this.manga, newManga, this)
+
         dialog.targetController = this
         dialog.showDialog(router)
     }
@@ -75,6 +78,18 @@ class SearchController(
         } else {
             binding.progress.isVisible = false
             router.popController(this)
+        }
+    }
+
+    class RenameDialog(private val manga: Manga? = null, private val newName: String, private val callingController: Controller? = null) : DialogController() {
+        override fun onCreateDialog(savedViewState: Bundle?): Dialog {
+            return MaterialDialog(activity!!)
+                    .message(R.string.update_check_look_for_updates)
+                    .positiveButton(R.string.migrate) {
+                        (targetController as? SearchController)?.renameManga()
+                    }
+                    .neutralButton(android.R.string.cancel)
+                    .build()
         }
     }
 
